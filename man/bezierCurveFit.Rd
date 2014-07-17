@@ -56,13 +56,13 @@ mrnorm <- mrnorm - cbind(rep(1, nrow(m)), rep(1, nrow(m)))
 bfitu <- bezierCurveFit(mrnorm)
 
 ## PLOT ORIGINAL BEZIER
-plot(m, type='l')
+plot(m, type="l")
 
 ## PLOT POINTS USED IN FITTING
-points(mrnorm, col='green', cex=0.25)
+points(mrnorm, col="green", cex=0.25)
 
 ## PLOT FIT CURVE
-lines(bezier(t=seq(0, 1, length=500), p=bfitu$p), col='red', cex=0.25)
+lines(bezier(t=seq(0, 1, length=500), p=bfitu$p), col="red", cex=0.25)
 }
 \keyword{ bezier }
 \keyword{ curve fitting }

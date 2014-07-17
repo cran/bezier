@@ -46,10 +46,10 @@ b6 <- bezier(t=seq(0, 1, length=100), p=p6)
 plot(b4)
 
 ## PLOT 5TH DEGREE BEZIER POINTS WITHIN 4TH DEGREE POINTS
-points(b5, col='red', cex=0.75)
+points(b5, col="red", cex=0.75)
 
 ## PLOT 6TH DEGREE BEZIER POINTS WITHIN 4TH DEGREE POINTS
 ## NOTE THAT POINTS COINCIDE EXACTLY WITH LOWER DEGREES
 ## THE CURVE IS UNCHANGED BY DEGREE ELEVATION
-points(b6, col='green', cex=0.5)
+points(b6, col="green", cex=0.5)
 }

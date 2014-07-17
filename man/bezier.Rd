@@ -88,7 +88,7 @@ bezier_points <- bezier(t=t, p=p[, 1:2], deg=2)
 plot(bezier_points)
 
 ## PLOT FIXED POINTS ALONG SPLINE IN RED
-points(rbind(p[1, ], p[3, ], p[5, ], p[7, ]), col='red', cex=0.75)
+points(rbind(p[1, ], p[3, ], p[5, ], p[7, ]), col="red", cex=0.75)
 
 ## CREATE A 3D BEZIER SPLINE WITH 3, 2-DEGREE BEZIER CURVES
 bezier_points <- bezier(t=t, p=p, deg=2)

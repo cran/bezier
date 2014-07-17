@@ -20,7 +20,7 @@ bezierCurveFit <- function(m, min.control.points = 3, max.control.points = 20, f
 	
 			# FIND POINTS ON LINE BETWEEN NON-NA VALUES
 			m_fill <- matrix(m[next_non_na, ] - m[i-1, ], nrow=next_non_na-i+2, ncol=ncol(m), byrow=TRUE)*seq(0, 1, length=next_non_na-i+2) + matrix(m[i-1, ], nrow=next_non_na-i+2, ncol=ncol(m), byrow=TRUE)
-			
+
 			# ENTER VALUES INTO M MATRIX
 			m[(i-1):next_non_na, ] <- m_fill
 	
@@ -91,7 +91,7 @@ bezierCurveFit <- function(m, min.control.points = 3, max.control.points = 20, f
 			init_param_values <- c(parameter_estimate, init_param_values[1])
 
 			# TEST IF MAX.RSE.PERCENT.CHANGE HAS BEEN REACHED USING A LINEAR REGRESSION EXCLUDING FIRST POINT
-			if(!is.null(max.rse.percent.change) && j <= 6 && j > 3){
+			if(!is.null(max.rse.percent.change) && sum(!is.na(rse[2:length(rse)])) >= 3 && sum(!is.na(rse[2:length(rse)])) <= 6){
 
 				# FIND SLOPE OF LAST TEN POINTS
 				rse_deriv <- summary(lm(rse ~ num_param, data=data.frame(num_param=1:length(na.omit(rse[2:length(rse)])), rse=na.omit(rse[2:length(rse)]))))$coefficients[2, 1]
@@ -102,7 +102,7 @@ bezierCurveFit <- function(m, min.control.points = 3, max.control.points = 20, f
 			}
 
 			# TEST IF MAX.RSE.PERCENT.CHANGE HAS BEEN REACHED USING AN EXPONENTIAL REGRESSION
-			if(!is.null(max.rse.percent.change) && j >= 7){
+			if(!is.null(max.rse.percent.change) && sum(!is.na(rse)) > 7){
 			
 				# FIT AN EXPONENTIAL FUNCTION TO RSE VALUES
 				model <- nls(rse ~ b1*exp(b2*num_param) + b3, data=data.frame(num_param=1:length(na.omit(rse)), rse=na.omit(rse)), start=exp_start, control = nls.control(maxiter = 100, warnOnly = TRUE, minFactor = 1/2048))
