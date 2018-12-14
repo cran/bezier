@@ -1,4 +1,5 @@
 pointsOnBezier <- function(p, n = NULL, method = 'evenly_spaced', t1 = 0, t2 = NULL, deg = NULL, max.dist = NULL, max.dist.factor = 0.1, relative.min.slope = 1e-7, absolute.min.slope = 0, sub.relative.min.slope = 1e-4, sub.absolute.min.slope = 0, print.progress = FALSE){
+	# BUG: WITH ADJOINING METHOD SEEMS TO BE OVERSHOOTING END POINT BY ONE
 
 	# IF N IS NULL AND MAX.DIST IS DEFINED, METHOD IS MAX_DIST
 	if(is.null(n) && !is.null(max.dist)) method <- 'max_dist'
@@ -76,6 +77,13 @@ pointsOnBezier <- function(p, n = NULL, method = 'evenly_spaced', t1 = 0, t2 = N
 
 			# UPDATE STEP VARIABLE
 			s1 <- s1 + iter
+		}
+		
+		# IF LAST POINT OVERSHOOTS CONTROL POINT, TRIM FROM MATRIX AND VECTORS
+		if(sum(abs(points_on_bezier[nrow(points_on_bezier)-1, ] - p[nrow(p), ])) == 0){
+			points_on_bezier <- points_on_bezier[-nrow(points_on_bezier), ]
+			error <- error[-length(error)]
+			t2_vector <- t2_vector[-(length(t2_vector)-1)]
 		}
 
 		rownames(points_on_bezier) <- NULL

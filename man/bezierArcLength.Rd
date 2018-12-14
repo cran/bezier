@@ -2,7 +2,7 @@
 \alias{bezierArcLength}
 \title{Approximates the arc length of a Bezier curve or spline}
 \description{
-Approximates the arc length (the length along the curve) of a Bezier curve or spline over a specified parametric range. The Bezier curve can be of any degree and any number of dimensions. Either relative and/or absolute changes in arc length are used as criteria for convergence criteria.
+Approximates the arc length (the length along the curve) of a Bezier curve or spline over a specified parametric range. The Bezier curve can be of any degree and any number of dimensions. Either relative and/or absolute changes in arc length are used as criteria for convergence.
 }
 \usage{
 bezierArcLength(p, t1 = 0, t2 = NULL, deg = NULL, relative.min.slope = 1e-06, 
@@ -19,7 +19,7 @@ bezierArcLength(p, t1 = 0, t2 = NULL, deg = NULL, relative.min.slope = 1e-06,
   \item{n}{a fixed number of points with which to calculate arc length.}
 }
 \details{
-There is not an exact solution for the arc length of a Bezier curve of any degree and dimension so a numerical estimation approach is needed. \code{bezierArcLength} estimates arc length by generating a number of points along a Bezier curve (using \code{\link{bezier}}) and summing the interpoint distances. Given a sufficient number of points on the Bezier, the sum of interpoint distances should approximate the actual length of the Bezier. In the case of Bezier splines, the arc length of each constituent Bezier curve is estimated separately separately and then summed. In this case, the return values are vectors in which each element corresponds to a separate call to \code{bezierArcLength} for each Bezier curve.
+There is not an exact solution for the arc length of a Bezier curve of any degree and dimension so a numerical estimation approach is needed. \code{bezierArcLength} estimates arc length by generating a number of points along a Bezier curve (using \code{\link{bezier}}) and summing the interpoint distances. Given a sufficient number of points on the Bezier, the sum of interpoint distances should approximate the actual length of the Bezier. In the case of Bezier splines, the arc length of each constituent Bezier curve is estimated separately and then summed. In this case, the return values are vectors in which each element corresponds to a separate call to \code{bezierArcLength} for each Bezier curve.
 
 The function first generates five points along the curve and sums the interpoint distance. This is repeated ten times, increasing the number of points along the curve by one (to 15). In this way, the arc length is estimated for a Bezier curve along a ten point range. A linear regression (\code{\link{lm}}) is fit to these arc lengths in order find the slope of how arc length changes as a function of the number of points along the Bezier. This slope is tested against the convergence criteria and, if the arc length has not converged, the slope is also used to guess  the next range of values over which arc length will be estimated. This is repeated, measuring the change in arc length over a ten point interval, until the change in arc length reaches the convergence criteria or the function exceeds the maximum number of iterations.
 

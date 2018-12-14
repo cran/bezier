@@ -2,12 +2,13 @@
 \alias{bezierCurveFit}
 \title{Fits a Bezier curve to a set of points}
 \description{
-Fits a Bezier curve of any degree and dimension to a set of points. A range or particular number of control points can be specified. If a range of control points is input, \code{bezierCurveFit} will find the minimum number of control points required to reach a specified residual standard error threshold.
+Fits a Bezier curve of any degree and dimension to a set of points. A range or particular number of control points can be specified. If a range of control points is input, \code{bezierCurveFit} will find the minimum number of control points required to reach a specified residual standard error threshold. \code{bezierCurveFit} is intended to fit a Bezier curve to a large number of sample points, at least double the number of expected Bezier control points, and therefore differs from Bezier curve interpolation, in which the number of sample points are approximately equal to the number of expected Bezier control points.
 }
 \usage{
 bezierCurveFit(m, min.control.points = 3, max.control.points = 20, 
                fix.start.end = FALSE, max.rse = NULL, 
-               max.rse.percent.change = 0.01, na.fill = FALSE)
+               max.rse.percent.change = 0.01, na.fill = FALSE,
+               maxiter = 50, minFactor = 1/1024)
 }
 \arguments{
   \item{m}{a vector or matrix of points to which the Bezier curve is to be fit.}
@@ -17,11 +18,13 @@ bezierCurveFit(m, min.control.points = 3, max.control.points = 20,
   \item{max.rse}{the threshold for residual standard error at which curve fitting is stopped.}
   \item{max.rse.percent.change}{the threshold for percent change in residual standard error at which curve fitting is stopped.}
   \item{na.fill}{logical indicating whether missing points (value of \code{NA}) in \code{m} should be filled by linear interpolation between neighboring non-\code{NA} points. Start and end points cannot be NA.}
+  \item{maxiter}{a positive integer specifying the maximum number of iterations allowed (to be passed to \code{nls} function).}
+  \item{minFactor}{a positive numeric value specifying the minimum step-size factor allowed on any step in the iteration (to be passed to \code{nls} function).}
 }
 \details{
 This function fits a Bezier curve to a vector or matrix of points. If \code{m} is a vector, the fitted curve is unidimensional. If \code{m} is a matrix, a multidimensional fitted curve is returned (where the number of dimensions is equal to \code{ncol(m)}). In either case, the curve fitting is performed on each dimension separately. This can produce different number of control points for each dimension; \code{\link{bezier}} resolves this through degree elevation (\code{\link{elevateBezierDegree}}).
 
-\code{min.control.points} specifies the minimum number of control points used in the curve fitting while \code{max.control.points} specifies the maximum. The number of control points includes the start and end points. If \code{min.control.points} is not equal to \code{max.control.points}, \code{bezierCurveFit} will find the minimum number of control points needed to reach the specified residual standard error threshold. If \code{min.control.points} is equal to \code{max.control.points}, the number of control points is fixed and \code{bezierCurveFit} will perform a single fit using that number of control points.
+\code{min.control.points} specifies the minimum number of control points used in the curve fitting while \code{max.control.points} specifies the maximum. The number of control points includes the start and end points. If \code{min.control.points} is not equal to \code{max.control.points}, \code{bezierCurveFit} will find the minimum number of control points needed to reach the specified residual standard error threshold. If \code{min.control.points} is equal to \code{max.control.points}, the number of control points is fixed and \code{bezierCurveFit} will perform a single fit using that number of control points. \code{bezierCurveFit} is intended to fit a Bezier curve to a large number of sample points, at least double the number of expected Bezier control points, and therefore differs from Bezier curve interpolation, in which the number of sample points are approximately equal to the number of expected Bezier control points.
 
 The \code{nls} function is used to find the control point coordinates that minimize the residual standard error (RSE) between the fitted Bezier curve and the input points \code{m}. If the number of control points is not fixed, the RSE is found for increasing numbers of control points and used to test for convergence. If the input convergence criteria are met, \code{bezierCurveFit} will return the control points at the current iteration. Thus, the number of control points may be less than \code{max.control.points}. The two convergence criteria are \code{max.rse} and \code{max.rse.percent.change}. If the absolute RSE reaches \code{max.rse}, \code{bezierCurveFit} stops increasing the number of control points and returns the fit at the current iteration.
 
